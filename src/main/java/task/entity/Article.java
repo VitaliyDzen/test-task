@@ -23,6 +23,7 @@ import task.entity.enums.Color;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Article {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
