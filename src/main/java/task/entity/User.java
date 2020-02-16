@@ -2,6 +2,7 @@ package task.entity;
 
 import static task.constants.DBConstant.USER_TABLE;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,4 +34,11 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Article> articles;
+
+    @Column(unique = true)
+    private String email;
+
+    @JsonIgnore
+    @Column(unique = true)
+    private String password;
 }
