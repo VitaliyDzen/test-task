@@ -21,4 +21,10 @@ public class UserSaveDto {
     @Max(value = 200, message = MAXIMUM_NUMBER_OF_YEARS)
     @Min(value = 0, message = MINIMUM_NUMBER_OF_YEARS)
     private Integer age;
+
+    @NotNull
+    private String email;
+
+    @NotNull
+    private String password;
 }

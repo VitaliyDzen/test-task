@@ -1,8 +1,10 @@
 package task.dto.user;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import task.entity.Article;
 
 @Data
 @NoArgsConstructor
@@ -14,4 +16,6 @@ public class UserDto {
     private String name;
 
     private Integer age;
+
+    private List<Article> articles;
 }

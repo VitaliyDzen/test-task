@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import task.dto.user.UserDto;
 import task.entity.Article;
-import task.entity.User;
 import task.entity.enums.Color;
 import task.repository.ArticleRepository;
 import task.repository.UserRepository;
@@ -30,8 +29,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserDto> findAll() {
+        return modelMapper.map(userRepository.findAll(),
+            new TypeToken<List<UserDto>>() {
+            }.getType());
     }
 
     @Override
@@ -55,10 +56,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<String> findUniqueUserNamesByArticlesCountGreaterThan(Integer articlesCount) {
         return userRepository.findUniqueUserNamesByArticlesCountGreaterThan(articlesCount);
-    }
-
-    @Override
-    public User save(User user) {
-        return userRepository.save(user);
     }
 }
