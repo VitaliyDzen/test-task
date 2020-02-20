@@ -13,9 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Table(name = USER_TABLE)
 @Entity
 @Data
@@ -42,4 +44,8 @@ public class User {
     @JsonIgnore
     @Column(unique = true)
     private String password;
+
+    @JsonIgnore
+    @Column(nullable = false)
+    private String refreshTokenKey;
 }
