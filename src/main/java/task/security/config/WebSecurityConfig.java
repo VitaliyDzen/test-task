@@ -3,6 +3,7 @@ package task.security.config;
 import static task.constants.ResourceMapping.SECURITY;
 import static task.constants.ResourceMapping.SIGN_IN;
 import static task.constants.ResourceMapping.SIGN_UP;
+import static task.constants.ResourceMapping.UPDATE_ACCESS_TOKEN;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -61,7 +62,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
-            .authorizeRequests().antMatchers(SECURITY + SIGN_IN, SECURITY + SIGN_UP)
+            .authorizeRequests().antMatchers(SECURITY + SIGN_IN,
+            SECURITY + UPDATE_ACCESS_TOKEN,
+            SECURITY + SIGN_UP)
             .permitAll().
             anyRequest().authenticated().and().
             exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()

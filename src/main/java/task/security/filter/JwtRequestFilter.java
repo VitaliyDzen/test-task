@@ -16,33 +16,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import task.security.jwt.JwtTokenUtil;
+import task.security.jwt.JwtTool;
 import task.security.service.SecurityService;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final SecurityService securityService;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTool jwtTool;
 
     @Autowired
     public JwtRequestFilter(
-        SecurityService securityService, JwtTokenUtil jwtTokenUtil) {
+        SecurityService securityService, JwtTool jwtTool) {
         this.securityService = securityService;
-        this.jwtTokenUtil = jwtTokenUtil;
+        this.jwtTool = jwtTool;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-        FilterChain chain)
-        throws ServletException, IOException {
+        FilterChain chain) throws IOException, ServletException {
         final String requestTokenHeader = request.getHeader(AUTHORIZATION);
         String username = null;
         String jwtToken = null;
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
-                username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+                username = jwtTool.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException | ExpiredJwtException e) {
                 throw new IllegalArgumentException(UNABLE_TO_GET_JWT_TOKEN, e);
             }
@@ -51,7 +50,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.securityService.loadUserByUsername(username);
 
-            if (jwtTokenUtil.isTokenValid(jwtToken, userDetails)) {
+            if (jwtTool.isTokenValid(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
