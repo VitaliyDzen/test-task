@@ -8,7 +8,8 @@ public final class ResourceMapping {
     public static final String ARTICLE_COLOR = ARTICLE + "/color/";
     public static final String AGE = "/age/";
     public static final String MORE_THEN_3 = "/more-then-3";
-    public static final String SECURITY = "/security";
+    public static final String SECURITY = "/auth";
     public static final String SIGN_IN = "/sign-in";
     public static final String SIGN_UP = "/sign-up";
+    public static final String UPDATE_ACCESS_TOKEN = "/update-access-token";
 }
