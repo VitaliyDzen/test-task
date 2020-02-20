@@ -1,5 +1,7 @@
 package task.dto.article;
 
+import static task.constants.ErrorMessage.THIS_FIELD_CAN_T_BE_NULL;
+
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
@@ -13,7 +15,7 @@ import task.entity.enums.Color;
 @AllArgsConstructor
 public class ArticleSaveDto {
 
-    @NotNull
+    @NotNull(message = THIS_FIELD_CAN_T_BE_NULL)
     private String text;
 
     @Enumerated(value = EnumType.STRING)
