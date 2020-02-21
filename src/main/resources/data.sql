@@ -1,4 +1,4 @@
-INSERT INTO user (name, age, email, password, refresh_token_key)
+INSERT INTO users (name, age, email, password, refresh_token_key)
 VALUES ('Max', 12, 'Max@gmail.com',
         '$2a$10$TTNZP/stgyPVxlb6hlph1.kPMXxQh7QPJ4btHJ8BY7AwP5PMjhTBm',
         '052a82be-886e-4b2c-b069-d2afd7645268'),
@@ -30,7 +30,7 @@ VALUES ('Max', 12, 'Max@gmail.com',
         '$2a$10$ZJ6ckRHdkeiSXQLR1kSPGun/ZOu6BF9xQEajmQAJDzUL1X2gagdxq',
         '7e720f5d-3397-4d2f-9573-c164f8e56594');
 
-INSERT INTO article (user_id, color, text)
+INSERT INTO articles (user_id, color, text)
 VALUES (1, 'RED', 'Carrie'),
        (1, 'RED', 'Salems Lot'),
        (1, 'BLUE', 'The Shining'),
