@@ -15,7 +15,7 @@
 
    ```properties
    spring.datasource.url=${DATABASE_URL}
-   spring.datasource.username=${DATABASE_USER}
+   spring.datasource.username=${DATABASE_USERs}
    spring.datasource.password=${DATABASE_PASSWORD}
    
    #Security
