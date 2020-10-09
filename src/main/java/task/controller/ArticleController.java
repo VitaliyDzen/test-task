@@ -30,6 +30,25 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @ApiOperation(value = "Get all users")
+    @GetMapping(USER)
+    public List<UserDto> getAllUsers() {
+        return userService.findAll();
+    }
+
+    @ApiOperation(value = "Get all users by article's color")
+    @GetMapping(USER + ARTICLE_COLOR)
+    public List<UserDto> findByArticlesColor(@RequestParam Color color) {
+        return userService.findByArticlesColor(color);
+    }
+
+  
+    
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = HttpStatuses.CREATED),
         @ApiResponse(code = 400, message = BAD_REQUEST),
@@ -42,4 +61,17 @@ public class ArticleController {
         @Valid @RequestBody ArticleSaveDto articleDto) {
         return articleService.save(userId, articleDto);
     }
+    
+      @ApiOperation(value = "Get all users by age greater than")
+    @GetMapping(USER + AGE)
+    public List<UserDto> findByAgeGreaterThan(@RequestParam Integer age) {
+        return userService.findByAgeGreaterThan(age);
+    }
+
+    @ApiOperation(value = "Get unique names of users that has more than 3 articles")
+    @GetMapping(USER_NAME + ARTICLE + MORE_THEN_3)
+    public List<String> findUniqueUserNamesByArticlesCountGreaterThan3() {
+        return userService.findUniqueUserNamesByArticlesCountGreaterThan(COUNT_OF_ARTICLES);
+    }
+    
 }
