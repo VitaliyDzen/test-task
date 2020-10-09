@@ -20,13 +20,6 @@ public class UserServiceImpl implements UserService {
     private final ArticleRepository articleRepository;
     private final ModelMapper modelMapper;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, ArticleRepository articleRepository,
-        ModelMapper modelMapper) {
-        this.userRepository = userRepository;
-        this.articleRepository = articleRepository;
-        this.modelMapper = modelMapper;
-    }
 
     @Override
     public List<UserDto> findAll() {
@@ -42,6 +35,23 @@ public class UserServiceImpl implements UserService {
             }.getType());
     }
 
+     @Autowired
+    public ArticleServiceImpl(ArticleRepository articleRepository, UserRepository userRepository,
+        ModelMapper modelMapper) {
+        this.articleRepository = articleRepository;
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+    }
+
+    @Override
+    public Article save(Long userId, ArticleSaveDto articleDto) {
+        Article article = modelMapper.map(articleDto, Article.class);
+        return userRepository.findById(userId).map(user -> {
+            article.setUser(user);
+            return articleRepository.save(article);
+        }).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_WITH_ID + userId));
+    }
+    
     @Override
     public List<UserDto> findByArticlesColor(Color color) {
         return modelMapper.map(articleRepository.findAllByColor(color)
