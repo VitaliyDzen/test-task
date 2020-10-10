@@ -57,6 +57,23 @@ public class SecurityService implements UserDetailsService {
             user.get().getPassword(),
             new ArrayList<>());
     }
+    
+     @Autowired
+    public ArticleServiceImpl(ArticleRepository articleRepository, UserRepository userRepository,
+        ModelMapper modelMapper) {
+        this.articleRepository = articleRepository;
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+    }
+
+    @Override
+    public Article save(Long userId, ArticleSaveDto articleDto) {
+        Article article = modelMapper.map(articleDto, Article.class);
+        return userRepository.findById(userId).map(user -> {
+            article.setUser(user);
+            return articleRepository.save(article);
+        }).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_WITH_ID + userId));
+    }
 
     public User saveUser(UserSaveDto userDto) {
         if (!(userRepository.findByEmail(userDto.getEmail()).isPresent())) {
@@ -85,6 +102,44 @@ public class SecurityService implements UserDetailsService {
         }
         return passwordEncoder.matches(signInDto.getPassword(), user.getPassword());
     }
+    
+     @Autowired
+    public UserServiceImpl(UserRepository userRepository, ArticleRepository articleRepository,
+        ModelMapper modelMapper) {
+        this.userRepository = userRepository;
+        this.articleRepository = articleRepository;
+        this.modelMapper = modelMapper;
+    }
+
+    @Override
+    public List<UserDto> findAll() {
+        return modelMapper.map(userRepository.findAll(),
+            new TypeToken<List<UserDto>>() {
+            }.getType());
+    }
+
+    @Override
+    public List<UserDto> findByAgeGreaterThan(Integer age) {
+        return modelMapper.map(userRepository.findUsersByAgeGreaterThan(age),
+            new TypeToken<List<UserDto>>() {
+            }.getType());
+    }
+
+    @Override
+    public List<UserDto> findByArticlesColor(Color color) {
+        return modelMapper.map(articleRepository.findAllByColor(color)
+                .stream()
+                .map(Article::getUser)
+                .distinct()
+                .collect(Collectors.toList()),
+            new TypeToken<List<UserDto>>() {
+            }.getType());
+    }
+
+    @Override
+    public List<String> findUniqueUserNamesByArticlesCountGreaterThan(Integer articlesCount) {
+        return userRepository.findUniqueUserNamesByArticlesCountGreaterThan(articlesCount);
+    }
 
     @Transactional
     public AccessRefreshTokensDto updateAccessTokens(String refreshToken) {
@@ -107,6 +162,44 @@ public class SecurityService implements UserDetailsService {
             );
         }
         throw new BadRefreshTokenException(REFRESH_TOKEN_NOT_VALID);
+    }
+    
+     @Autowired
+    public UserServiceImpl(UserRepository userRepository, ArticleRepository articleRepository,
+        ModelMapper modelMapper) {
+        this.userRepository = userRepository;
+        this.articleRepository = articleRepository;
+        this.modelMapper = modelMapper;
+    }
+
+    @Override
+    public List<UserDto> findAll() {
+        return modelMapper.map(userRepository.findAll(),
+            new TypeToken<List<UserDto>>() {
+            }.getType());
+    }
+
+    @Override
+    public List<UserDto> findByAgeGreaterThan(Integer age) {
+        return modelMapper.map(userRepository.findUsersByAgeGreaterThan(age),
+            new TypeToken<List<UserDto>>() {
+            }.getType());
+    }
+
+    @Override
+    public List<UserDto> findByArticlesColor(Color color) {
+        return modelMapper.map(articleRepository.findAllByColor(color)
+                .stream()
+                .map(Article::getUser)
+                .distinct()
+                .collect(Collectors.toList()),
+            new TypeToken<List<UserDto>>() {
+            }.getType());
+    }
+
+    @Override
+    public List<String> findUniqueUserNamesByArticlesCountGreaterThan(Integer articlesCount) {
+        return userRepository.findUniqueUserNamesByArticlesCountGreaterThan(articlesCount);
     }
 
 }
