@@ -15,10 +15,17 @@ import task.entity.enums.Color;
 @AllArgsConstructor
 public class ArticleSaveDto {
 
+     private Long id;
+
+    private String text;
+    
     @NotNull(message = THIS_FIELD_CAN_T_BE_NULL)
     private String text;
 
     @Enumerated(value = EnumType.STRING)
+    private Color color;
+    
+       @Enumerated(value = EnumType.STRING)
     private Color color;
 
 }
