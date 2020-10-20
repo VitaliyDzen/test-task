@@ -14,7 +14,24 @@ public class ArticleDto {
 
     private Long id;
 
-    private String text;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+02")
+    private Date lessonDate;
+
+    private AudienceDTO audience;
+
+    private SubjectDTO subject;
+
+    private LessonTypeDTO lessonType;
+
+    private Integer numberOfLessonInDay;
+
+    private TeacherShortDTO teacher;
+
+    private List<GroupShortDTO> groups;
+    
+    private String name;
+
+    private String description;
 
     @Enumerated(value = EnumType.STRING)
     private Color color;
