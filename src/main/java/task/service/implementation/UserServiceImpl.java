@@ -28,11 +28,18 @@ public class UserServiceImpl implements UserService {
         this.modelMapper = modelMapper;
     }
 
-    @Override
-    public List<UserDto> findAll() {
-        return modelMapper.map(userRepository.findAll(),
-            new TypeToken<List<UserDto>>() {
-            }.getType());
+   public GroupDTO getByName(String name) {
+        return modelMapper.map(groupRepository.findByName(name), GroupDTO.class);
+    }
+
+    public List<GroupDTO> getAllGroups() {
+        return modelMapper.map(groupRepository.findAll(), new TypeToken<List<GroupDTO>>() {
+        }.getType());
+    }
+
+    public List<GroupAndroidDTO> getAllGroupNames() {
+        return groupRepository.findAll().stream().map(GroupAndroidDTO::new)
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -42,6 +49,18 @@ public class UserServiceImpl implements UserService {
             }.getType());
     }
 
+     public List<GroupAndroidDTO> getAllByInstituteName(String name) {
+        return groupRepository.findByInstituteName(name).stream().map(GroupAndroidDTO::new)
+            .collect(Collectors.toList());
+    }
+
+    public GroupDTO getGroupById(Long id) {
+        return modelMapper.map(groupRepository.findById(id)
+                .orElseThrow(() ->
+                    new ResourceNotFoundException("Element with id - " + id + " not found"))
+            , GroupDTO.class);
+    }
+    
     @Override
     public List<UserDto> findByArticlesColor(Color color) {
         return modelMapper.map(articleRepository.findAllByColor(color)
@@ -53,8 +72,27 @@ public class UserServiceImpl implements UserService {
             }.getType());
     }
 
-    @Override
-    public List<String> findUniqueUserNamesByArticlesCountGreaterThan(Integer articlesCount) {
-        return userRepository.findUniqueUserNamesByArticlesCountGreaterThan(articlesCount);
+      public void remove(Long id) {
+        groupRepository.deleteById(id);
     }
+
+    public Group update(Long id, GroupPostDTO group) {
+        return groupRepository.findById(id)
+            .map(employee -> {
+                employee.setName(group.getName());
+                employee.setInstitute(group.getInstitute());
+                employee.setSpecialty(group.getSpecialty());
+                employee.setCurator(group.getCurator());
+                employee.setDepartment(group.getDepartment());
+                employee.setCourse(group.getCourse());
+                return groupRepository.save(employee);
+            })
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Group with id - " + id + " not found"));
+    }
+    
+      public Group save(GroupPostDTO group) {
+        return groupRepository.save(modelMapper.map(group, Group.class));
+    }
+
 }
