@@ -40,6 +40,24 @@ public class UserController {
         this.userService = userService;
     }
 
+    @ApiOperation(value = "Get all groups")
+    @GetMapping("/all")
+    public List<GroupDTO> getAllGroups() {
+        return groupService.getAllGroups();
+    }
+
+    @ApiOperation(value = "Get all groups for android")
+    @GetMapping("/allGroupNames")
+    public List<GroupAndroidDTO> getAllGroupNames() {
+        return groupService.getAllGroupNames();
+    }
+
+    @ApiOperation(value = "Get all groups by name")
+    @GetMapping("/name/{name}")
+    public GroupDTO getByName(@PathVariable String name) {
+        return groupService.getByName(name);
+    }
+    
     @ApiOperation(value = "Get all users")
     @GetMapping(USER)
     public List<UserDto> getAllUsers() {
@@ -57,10 +75,27 @@ public class UserController {
     public List<UserDto> findByAgeGreaterThan(@RequestParam Integer age) {
         return userService.findByAgeGreaterThan(age);
     }
+    
+      @ApiOperation(value = "Get all groups for android by Institute name")
+    @GetMapping("/allDepartmentNames/{name}")
+    public List<GroupAndroidDTO> getAllByInstituteName(@PathVariable String name) {
+        return groupService.getAllByInstituteName(name);
+    }
 
-    @ApiOperation(value = "Get unique names of users that has more than 3 articles")
-    @GetMapping(USER_NAME + ARTICLE + MORE_THEN_3)
-    public List<String> findUniqueUserNamesByArticlesCountGreaterThan3() {
-        return userService.findUniqueUserNamesByArticlesCountGreaterThan(COUNT_OF_ARTICLES);
+    @ApiOperation(value = "Get group by id")
+    @GetMapping("/{id}")
+    public GroupDTO getGroupById(@PathVariable Long id) {
+        return groupService.getGroupById(id);
+    }
+
+    @ApiOperation(value = "Update")
+    @PutMapping("/{id}")
+    public void update(@RequestBody GroupPostDTO group, @PathVariable Long id) {
+        groupService.update(id, group);
+    }
+   @ApiOperation(value = "Delete")
+    @DeleteMapping("/{id}")
+    public void remove(@PathVariable Long id) {
+        groupService.remove(id);
     }
 }
