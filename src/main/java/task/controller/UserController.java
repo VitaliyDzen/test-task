@@ -46,10 +46,19 @@ public class UserController {
         return userService.findAll();
     }
 
-    @ApiOperation(value = "Get all users by article's color")
-    @GetMapping(USER + ARTICLE_COLOR)
-    public List<UserDto> findByArticlesColor(@RequestParam Color color) {
-        return userService.findByArticlesColor(color);
+    @GetMapping("/all")
+    public List<StudentDTO> getAllStudents() {
+        return studentService.getAllStudents();
+    }
+
+    @GetMapping("/{id}")
+    public StudentDTO getStudentById(@PathVariable Long id) {
+        return studentService.getStudentById(id);
+    }
+
+    @GetMapping("/name/{firstName}/{lastName}")
+    public StudentDTO getByFullName(@PathVariable String firstName, @PathVariable String lastName) {
+        return studentService.getByFullName(firstName, lastName);
     }
 
     @ApiOperation(value = "Get all users by age greater than")
@@ -57,10 +66,20 @@ public class UserController {
     public List<UserDto> findByAgeGreaterThan(@RequestParam Integer age) {
         return userService.findByAgeGreaterThan(age);
     }
-
-    @ApiOperation(value = "Get unique names of users that has more than 3 articles")
-    @GetMapping(USER_NAME + ARTICLE + MORE_THEN_3)
-    public List<String> findUniqueUserNamesByArticlesCountGreaterThan3() {
-        return userService.findUniqueUserNamesByArticlesCountGreaterThan(COUNT_OF_ARTICLES);
+    
+ @PutMapping("/{id}")
+    public void update(@RequestBody StudentPostDTO student, @PathVariable Long id) {
+        studentService.update(id, student);
     }
+
+    @PostMapping
+    public void save(@RequestBody StudentPostDTO student) {
+        studentService.save(student);
+    }
+    
+   @DeleteMapping("/{id}")
+    public void remove(@PathVariable Long id) {
+        studentService.remove(id);
+    }
+    
 }
