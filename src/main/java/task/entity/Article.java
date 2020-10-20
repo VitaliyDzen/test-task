@@ -26,18 +26,29 @@ import task.entity.enums.Color;
 @AllArgsConstructor
 public class Article {
 
-    @Id
+      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String text;
+    @Column(name = "name", length = 60, nullable = false, unique = true)
+    private String name;
 
+    
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Color color;
+    
+    @Column(name = "description", length = 300)
+    private String description;
 
     @JsonIgnore
-    @ManyToOne
-    private User user;
+    @OneToMany(mappedBy = "audience", fetch = FetchType.LAZY)
+    private List<Timetable> timetables;
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+
 }
