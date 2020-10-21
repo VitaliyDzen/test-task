@@ -32,20 +32,44 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private Integer age;
+
+    @Column(name = "first_name", length = 30, nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", length = 30, nullable = false)
+    private String lastName;
+
+    @Column(name = "middle_name", length = 30, nullable = false)
+    private String middleName;
+
+    @ManyToOne
+    private Department department;
+
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Article> articles;
+   @ManyToOne
+    private Rank rank;
 
-    @Column(unique = true)
-    private String email;
+    @Column(name = "phone_number", length = 30)
+    private String phoneNumber;
+
+    @Column(name = "about", length = 300)
+    private String about;
 
     @JsonIgnore
     @Column(unique = true)
     private String password;
 
+        @Override
+    public String toString() {
+        return lastName + " " + firstName + " " + middleName;
+    
+  @JsonIgnore
+    @OneToMany(mappedBy = "curator", fetch = FetchType.EAGER)
+    private List<Group> groups;
+
     @JsonIgnore
-    @Column(nullable = false)
-    private String refreshTokenKey;
+    @OneToMany(mappedBy = "teacher")
+    private List<Timetable> timetables;
 }
