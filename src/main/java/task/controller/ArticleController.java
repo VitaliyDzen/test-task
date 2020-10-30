@@ -29,6 +29,14 @@ public class ArticleController {
     public ArticleController(ArticleService articleService) {
         this.articleService = articleService;
     }
+    
+    private static final String template = "Hello, %s!";
+	private final AtomicLong counter = new AtomicLong();
+
+	@GetMapping("/greeting")
+	public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
+		return new Greeting(counter.incrementAndGet(), String.format(template, name));
+	}
 
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = HttpStatuses.CREATED),
@@ -42,4 +50,18 @@ public class ArticleController {
         @Valid @RequestBody ArticleSaveDto articleDto) {
         return articleService.save(userId, articleDto);
     }
+    
+    @RequestMapping(value = "/getDateAndTime")
+    public ModelAndView getDateAndTime() {
+
+        var now = LocalDateTime.now();
+        var dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        var date_time = dtf.format(now);
+
+        var params = new HashMap<String, Object>();
+        params.put("date_time", date_time);
+
+        return new ModelAndView("showMessage", params);
+    }
+    
 }
