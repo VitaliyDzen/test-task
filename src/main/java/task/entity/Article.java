@@ -31,13 +31,36 @@ public class Article {
     private Long id;
 
     @Column(nullable = false)
-    private String text;
-
-    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Color color;
+    
+    
+     private String firstName;
+  private String lastName;
 
-    @JsonIgnore
-    @ManyToOne
-    private User user;
+
+  public Customer(String firstName, String lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  @Override
+  public String toString() {
+    return String.format(
+        "Customer[id=%d, firstName='%s', lastName='%s']",
+        id, firstName, lastName);
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+    
 }
