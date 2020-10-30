@@ -45,22 +45,64 @@ public class UserController {
     public List<UserDto> getAllUsers() {
         return userService.findAll();
     }
-
-    @ApiOperation(value = "Get all users by article's color")
-    @GetMapping(USER + ARTICLE_COLOR)
-    public List<UserDto> findByArticlesColor(@RequestParam Color color) {
-        return userService.findByArticlesColor(color);
+  @GetMapping("/{id}", produces = "application/json")
+    public @ResponseBody Book getBook(@PathVariable int id) {
+        return findBookById(id);
     }
-
+    
     @ApiOperation(value = "Get all users by age greater than")
     @GetMapping(USER + AGE)
     public List<UserDto> findByAgeGreaterThan(@RequestParam Integer age) {
         return userService.findByAgeGreaterThan(age);
     }
 
+      @GetMapping("/{id}", produces = "application/json")
+    public Book getBook(@PathVariable int id) {
+        return findBookById(id);
+    }
+    
     @ApiOperation(value = "Get unique names of users that has more than 3 articles")
     @GetMapping(USER_NAME + ARTICLE + MORE_THEN_3)
     public List<String> findUniqueUserNamesByArticlesCountGreaterThan3() {
         return userService.findUniqueUserNamesByArticlesCountGreaterThan(COUNT_OF_ARTICLES);
     }
+    
+     @GetMapping(path="/", produces = "application/json")
+    public Employees getEmployees() 
+    {
+        return employeeDao.getAllEmployees();
+    }
+     
+    @PostMapping(path= "/", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Object> addEmployee(@RequestBody Employee employee) 
+    {
+        Integer id = employeeDao.getAllEmployees().getEmployeeList().size() + 1;
+        employee.setId(id);
+         
+        employeeDao.addEmployee(employee);
+         
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                                    .path("/{id}")
+                                    .buildAndExpand(employee.getId())
+                                    .toUri();
+         
+        return ResponseEntity.created(location).build();
+    }
+    
+      @GetMapping("/issuereport") // 
+    public String getReport() { // 
+        return "issues/issuereport_form";
+    }
+
+    @PostMapping("/issuereport") // 
+    public String submitReport() { // 
+        return "issues/issuereport_form";
+    }
+
+    @GetMapping("/issues")
+    public String getIssues() {  // 
+        return "issues/issuereport_list";
+    }
+    
+    
 }
