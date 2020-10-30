@@ -26,37 +26,43 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    @Bean
-    public Docket api() {
-        Docket docket =
-            new Docket(DocumentationType.SWAGGER_2)
-                .pathMapping("/")
-                .apiInfo(ApiInfo.DEFAULT)
-                .forCodeGeneration(true)
-                .genericModelSubstitutes(ResponseEntity.class)
-                .ignoredParameterTypes(Pageable.class)
-                .ignoredParameterTypes(java.sql.Date.class)
-                .directModelSubstitute(java.time.LocalDate.class, java.sql.Date.class)
-                .directModelSubstitute(java.time.ZonedDateTime.class, Date.class)
-                .directModelSubstitute(java.time.LocalDateTime.class, Date.class)
-                .securityContexts(Lists.newArrayList(securityContext()))
-                .securitySchemes(Lists.newArrayList(apiKey()))
-                .useDefaultResponseMessages(false);
+  @Bean
+	public Docket postsApi() {
+		return new Docket(DocumentationType.SWAGGER_2).groupName("public-api")
+				.apiInfo(apiInfo()).select().paths(postPaths()).build();
+	}
 
-        docket = docket.select()
-            .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class)).build();
-        return docket;
-    }
+	private Predicate<String> postPaths() {
+		return or(regex("/api/posts.*"), regex("/api/javainuse.*"));
+	}
 
+	private ApiInfo apiInfo() {
+		return new ApiInfoBuilder().title("JavaInUse API")
+				.description("JavaInUse API reference for developers")
+				.termsOfServiceUrl("http://javainuse.com")
+				.contact("javainuse@gmail.com").license("JavaInUse License")
+				.licenseUrl("javainuse@gmail.com").version("1.0").build();
+	}
     private ApiKey apiKey() {
         return new ApiKey("JWT", AUTHORIZATION_HEADER, "header");
     }
 
-    private SecurityContext securityContext() {
-        return SecurityContext.builder()
-            .securityReferences(defaultAuth())
-            .forPaths(this::include)
-            .build();
+    
+public class SwaggerConfig extends WebMvcConfigurationSupport {
+    @Bean
+    public Docket productApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()                 .apis(RequestHandlerSelectors.basePackage("guru.springframework.controllers"))
+                .paths(regex("/product.*"))
+                .build();
+             
+    }
+  @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     private List<SecurityReference> defaultAuth() {
