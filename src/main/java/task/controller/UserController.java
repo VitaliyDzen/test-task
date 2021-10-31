@@ -42,25 +42,25 @@ public class UserController {
 
     @ApiOperation(value = "Get all users")
     @GetMapping(USER)
-    public List<UserDto> getAllUsers() {
+    public List < UserDto > getAllUsers() {
         return userService.findAll();
     }
 
     @ApiOperation(value = "Get all users by article's color")
     @GetMapping(USER + ARTICLE_COLOR)
-    public List<UserDto> findByArticlesColor(@RequestParam Color color) {
+    public List < UserDto > findByArticlesColor(@RequestParam Color color) {
         return userService.findByArticlesColor(color);
     }
 
     @ApiOperation(value = "Get all users by age greater than")
     @GetMapping(USER + AGE)
-    public List<UserDto> findByAgeGreaterThan(@RequestParam Integer age) {
+    public List < UserDto > findByAgeGreaterThan(@RequestParam Integer age) {
         return userService.findByAgeGreaterThan(age);
     }
 
     @ApiOperation(value = "Get unique names of users that has more than 3 articles")
     @GetMapping(USER_NAME + ARTICLE + MORE_THEN_3)
-    public List<String> findUniqueUserNamesByArticlesCountGreaterThan3() {
+    public List < String > findUniqueUserNamesByArticlesCountGreaterThan3() {
         return userService.findUniqueUserNamesByArticlesCountGreaterThan(COUNT_OF_ARTICLES);
     }
 }
