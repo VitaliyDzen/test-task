@@ -34,10 +34,26 @@ public class Article {
     private String text;
 
     @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private Color color;
+    private String name;
 
-    @JsonIgnore
+    @Column(nullable = false, unique = true)
+    private String factorySerialNumber;
+
     @ManyToOne
-    private User user;
+    private AirCompany airCompany;
+
+    @Column(nullable = false)
+    private Integer numberOfFlights;
+
+    @Column(nullable = false)
+    private Float flightDistance;
+    
+    @Column(nullable = false)
+    private Float fuelCapacity;
+
+    @ManyToOne
+    private AirplaneType airplaneType;
+
+    @Column(nullable = false)
+    private Date createdAt;
 }
