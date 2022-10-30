@@ -31,9 +31,21 @@ public class User {
 
     @Column(nullable = false)
     private String name;
-
+    
     @Column(nullable = false)
-    private Integer age;
+    @Enumerated(value = EnumType.STRING)
+    private FlightStatus flightStatus;
+
+    @JsonIgnore
+    @ManyToOne
+    private AirCompany airCompany;
+
+    @JsonIgnore
+    @ManyToOne
+    private Airplane airplane;
+
+    @OneToOne
+    private Country departureCountry;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Article> articles;
@@ -41,9 +53,17 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @JsonIgnore
-    @Column(unique = true)
-    private String password;
+    @Column(nullable = false)
+    private Float distance;
+
+    @Column(nullable = false)
+    private Time estimatedFlightTime;
+
+    @Column
+    private Date endedAt;
+
+    @Column
+    private Date createdAt;
 
     @JsonIgnore
     @Column(nullable = false)
