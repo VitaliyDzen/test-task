@@ -29,6 +29,18 @@ public class ArticleController {
     public ArticleController(ArticleService articleService) {
         this.articleService = articleService;
     }
+    
+    
+    @GetMapping(STATUS + ACTIVE_DATE_YESTERDAY)
+    public List<FlightDto> findAllByFlightByActiveStatusAndLessThanYesterday() {
+        return flightService.findAllByFlightByActiveStatusAndLessThanYesterday();
+    }
+
+    @PostMapping
+    public ResponseEntity<Flight> save(@Valid @RequestBody FlightPostDto flightPostDto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(flightService.save(flightPostDto));
+    }
 
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = HttpStatuses.CREATED),
@@ -42,4 +54,22 @@ public class ArticleController {
         @Valid @RequestBody ArticleSaveDto articleDto) {
         return articleService.save(userId, articleDto);
     }
+    
+    
+       @PutMapping(ID_PATH_VARIABLE + STATUS)
+    public ResponseEntity<Flight> updateStatus(@RequestParam FlightStatus flightStatus, @PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(flightService.updateStatus(flightStatus, id));
+    }
+
+    @GetMapping(ID)
+    public FlightDto findFlightById(@RequestParam Long id) {
+        return flightService.findFlightById(id);
+    }
+
+    @GetMapping(STATUS + COMPLETED_DELAYED)
+    public List<FlightDto> findAllByFlightStatusCOMPLETEDAndDelayed() {
+        return flightService.findAllByFlightStatusCOMPLETEDAndDelayed();
+    }
+    
 }
